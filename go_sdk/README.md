@@ -1,7 +1,14 @@
-# TikTok Business API SDK - Go
+<div align="center">
+  <img src="media/logo.png" alt="TikTok Business API SDK" width="300"/>
+  
+  # TikTok Business API SDK - Go
 
-[![Go Version](https://img.shields.io/badge/Go-1.19+-blue.svg)](https://golang.org)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+  [![Go Version](https://img.shields.io/badge/Go-1.19+-blue.svg)](https://golang.org)
+  [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+  [![TikTok API](https://img.shields.io/badge/TikTok-Business%20API-ff0050.svg)](https://ads.tiktok.com/marketing_api/)
+  [![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen.svg)](https://github.com/tiktok/tiktok-business-api-sdk)
+
+</div>
 
 The TikTok Business API SDK for Go provides a comprehensive and idiomatic Go interface to the [TikTok API for Business](https://ads.tiktok.com/marketing_api/). This SDK enables developers to integrate with TikTok's advertising platform efficiently and follows Go best practices.
 
