@@ -22,16 +22,23 @@ type Client struct {
 	baseURL     *url.URL
 
 	// API services
-	account   AccountService
-	campaign  CampaignService
-	ad        AdService
-	adGroup   AdGroupService
-	audience  AudienceService
-	creative  CreativeService
-	reporting ReportingService
-	tool      ToolService
-	bc        BCService
-	auth      AuthService
+	account        AccountService
+	campaign       CampaignService
+	ad             AdService
+	adGroup        AdGroupService
+	audience       AudienceService
+	creative       CreativeService
+	reporting      ReportingService
+	tool           ToolService
+	bc             BCService
+	auth           AuthService
+	businessCenter *BusinessCenterService
+	catalog        *CatalogService
+	dmp            *DMPService
+	pixel          *PixelService
+	optimizer      OptimizerService
+	comment        CommentService
+	report         ReportService
 }
 
 // NewClient creates a new TikTok Business API client
@@ -93,16 +100,24 @@ func (c *Client) initServices() {
 	c.account = &accountService{client: c}
 	c.campaign = &campaignService{client: c}
 	c.tool = &toolService{client: c}
+	c.auth = &authService{client: c}
+
+	// New expanded services
+	c.businessCenter = NewBusinessCenterService(c)
+	c.catalog = NewCatalogService(c)
+	c.dmp = NewDMPService(c)
+	c.pixel = NewPixelService(c)
+	c.creative = NewCreativeService(c)
+	c.optimizer = NewOptimizerService(c)
+	c.comment = NewCommentService(c)
+	c.report = NewReportService(c)
 
 	// Services not yet implemented - return clear error messages
 	c.ad = &notImplementedAdService{}
 	c.adGroup = &notImplementedAdGroupService{}
 	c.audience = &notImplementedAudienceService{}
-	c.creative = &notImplementedCreativeService{}
 	c.reporting = &notImplementedReportingService{}
 	c.bc = &notImplementedBCService{}
-
-	c.auth = &authService{client: c}
 }
 
 // DoRequest performs an HTTP request with rate limiting and retry logic
@@ -256,6 +271,41 @@ func (c *Client) Reporting() ReportingService {
 // Tool returns the Tool API service
 func (c *Client) Tool() ToolService {
 	return c.tool
+}
+
+// BusinessCenter returns the Business Center API service
+func (c *Client) BusinessCenter() *BusinessCenterService {
+	return c.businessCenter
+}
+
+// Catalog returns the Catalog API service
+func (c *Client) Catalog() *CatalogService {
+	return c.catalog
+}
+
+// DMP returns the DMP (Data Management Platform) API service
+func (c *Client) DMP() *DMPService {
+	return c.dmp
+}
+
+// Pixel returns the Pixel API service
+func (c *Client) Pixel() *PixelService {
+	return c.pixel
+}
+
+// Optimizer returns the Optimizer API service
+func (c *Client) Optimizer() OptimizerService {
+	return c.optimizer
+}
+
+// Comment returns the Comment API service
+func (c *Client) Comment() CommentService {
+	return c.comment
+}
+
+// Report returns the Report API service
+func (c *Client) Report() ReportService {
+	return c.report
 }
 
 // BC returns the Business Center API service

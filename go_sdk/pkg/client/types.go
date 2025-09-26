@@ -236,25 +236,7 @@ type AdGroupDeleteResponse struct{}
 type AdGroupStatusUpdateRequest struct{}
 type AdGroupStatusUpdateResponse struct{}
 
-type CustomAudienceCreateRequest struct{}
-type CustomAudienceCreateResponse struct{}
-type CustomAudienceGetRequest struct{}
-type CustomAudienceGetResponse struct{}
-type CustomAudienceUpdateRequest struct{}
-type CustomAudienceUpdateResponse struct{}
-type CustomAudienceDeleteRequest struct{}
-type CustomAudienceDeleteResponse struct{}
-type LookalikeAudienceCreateRequest struct{}
-type LookalikeAudienceCreateResponse struct{}
-
-type ImageUploadRequest struct{}
-type ImageUploadResponse struct{}
-type VideoUploadRequest struct{}
-type VideoUploadResponse struct{}
-type CreativeGetRequest struct{}
-type CreativeGetResponse struct{}
-type CreativeUpdateRequest struct{}
-type CreativeUpdateResponse struct{}
+// Custom audience types moved to dmp_service.go to avoid duplication
 
 type ReportingRequest struct{}
 type ReportingResponse struct{}
@@ -352,3 +334,310 @@ type BusinessCenterInfo struct{}
 type BCAdvertisersResponse struct{}
 type TransferAdvertiserRequest struct{}
 type TransferAdvertiserResponse struct{}
+
+// Tool API - Additional types for new endpoints
+type TargetingInfoRequest struct {
+	AdvertiserID string   `json:"advertiser_id"`
+	Type         string   `json:"type"` // LOCATION, ZIP_CODE, ISP
+	IDs          []string `json:"ids"`
+	CountryCode  string   `json:"country_code,omitempty"`
+}
+
+type TargetingInfoResponse struct {
+	models.BaseResponse
+	Data []TargetingInfo `json:"data"`
+}
+
+type TargetingInfo struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Type        string `json:"type"`
+	CountryCode string `json:"country_code,omitempty"`
+	ParentID    string `json:"parent_id,omitempty"`
+	Path        string `json:"path,omitempty"`
+}
+
+type BidRecommendRequest struct {
+	AdvertiserID       string  `json:"advertiser_id"`
+	CampaignID         string  `json:"campaign_id,omitempty"`
+	Objective          string  `json:"objective"`
+	OptimizationEvent  string  `json:"optimization_event"`
+	LocationIDs        []int64 `json:"location_ids,omitempty"`
+	AgeGroups          []string `json:"age_groups,omitempty"`
+	Genders            []string `json:"genders,omitempty"`
+	InterestCategoryIDs []int64 `json:"interest_category_ids,omitempty"`
+	Languages          []string `json:"languages,omitempty"`
+	Placements         []string `json:"placements,omitempty"`
+}
+
+type BidRecommendResponse struct {
+	models.BaseResponse
+	Data BidRecommendData `json:"data"`
+}
+
+type BidRecommendData struct {
+	SuggestedBid float64 `json:"suggested_bid"`
+	Currency     string  `json:"currency"`
+	MinBid       float64 `json:"min_bid,omitempty"`
+	MaxBid       float64 `json:"max_bid,omitempty"`
+}
+
+type TargetingListRequest struct {
+	AdvertiserID string `json:"advertiser_id"`
+	Type         string `json:"type"` // LOCATION, INTEREST_CATEGORY, etc.
+	Language     string `json:"language,omitempty"`
+	Keyword      string `json:"keyword,omitempty"`
+	Page         int    `json:"page,omitempty"`
+	Size         int    `json:"size,omitempty"`
+}
+
+type TargetingListResponse struct {
+	models.BaseResponse
+	Data []TargetingListItem `json:"data"`
+}
+
+type TargetingListItem struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Type        string `json:"type"`
+	ParentID    string `json:"parent_id,omitempty"`
+	Path        string `json:"path,omitempty"`
+	CountryCode string `json:"country_code,omitempty"`
+}
+
+type TargetingSearchRequest struct {
+	AdvertiserID string `json:"advertiser_id"`
+	Type         string `json:"type"`
+	Keyword      string `json:"keyword"`
+	Language     string `json:"language,omitempty"`
+	CountryCode  string `json:"country_code,omitempty"`
+}
+
+type TargetingSearchResponse struct {
+	models.BaseResponse
+	Data []TargetingSearchItem `json:"data"`
+}
+
+type TargetingSearchItem struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Type        string `json:"type"`
+	ParentID    string `json:"parent_id,omitempty"`
+	CountryCode string `json:"country_code,omitempty"`
+}
+
+type OSVersionRequest struct {
+	AdvertiserID string `json:"advertiser_id"`
+	OSType       string `json:"os_type"` // ANDROID, IOS
+}
+
+type OSVersionResponse struct {
+	models.BaseResponse
+	Data []OSVersionInfo `json:"data"`
+}
+
+type OSVersionInfo struct {
+	OSVersionID   string `json:"os_version_id"`
+	OSVersionName string `json:"os_version_name"`
+	OSType        string `json:"os_type"`
+}
+
+type TimezoneResponse struct {
+	models.BaseResponse
+	Data []TimezoneInfo `json:"data"`
+}
+
+type TimezoneInfo struct {
+	TimezoneID   string `json:"timezone_id"`
+	TimezoneName string `json:"timezone_name"`
+	UTCOffset    string `json:"utc_offset"`
+}
+
+type URLValidateRequest struct {
+	AdvertiserID string `json:"advertiser_id"`
+	URL          string `json:"url"`
+}
+
+type URLValidateResponse struct {
+	models.BaseResponse
+	Data URLValidateData `json:"data"`
+}
+
+type URLValidateData struct {
+	IsValid bool   `json:"is_valid"`
+	Reason  string `json:"reason,omitempty"`
+}
+
+type HashtagRecommendRequest struct {
+	AdvertiserID string `json:"advertiser_id"`
+	Keywords     []string `json:"keywords"`
+	CountryCode  string `json:"country_code,omitempty"`
+	Language     string `json:"language,omitempty"`
+}
+
+type HashtagRecommendResponse struct {
+	models.BaseResponse
+	Data []HashtagInfo `json:"data"`
+}
+
+type HashtagInfo struct {
+	Hashtag     string `json:"hashtag"`
+	Relevance   float64 `json:"relevance,omitempty"`
+	Volume      int64   `json:"volume,omitempty"`
+}
+
+type InterestKeywordRequest struct {
+	AdvertiserID string `json:"advertiser_id"`
+	Keyword      string `json:"keyword"`
+	Language     string `json:"language,omitempty"`
+	CountryCode  string `json:"country_code,omitempty"`
+}
+
+type InterestKeywordResponse struct {
+	models.BaseResponse
+	Data []InterestKeywordInfo `json:"data"`
+}
+
+type InterestKeywordInfo struct {
+	Keyword     string  `json:"keyword"`
+	Relevance   float64 `json:"relevance,omitempty"`
+	Volume      int64   `json:"volume,omitempty"`
+}
+
+type ActionCategoryRequest struct {
+	AdvertiserID       string   `json:"advertiser_id"`
+	SpecialIndustries  []string `json:"special_industries,omitempty"`
+}
+
+type ActionCategoryResponse struct {
+	models.BaseResponse
+	Data []ActionCategoryInfo `json:"data"`
+}
+
+type ActionCategoryInfo struct {
+	ActionCategoryID   string `json:"action_category_id"`
+	ActionCategoryName string `json:"action_category_name"`
+	ParentCategoryID   string `json:"parent_category_id,omitempty"`
+}
+
+type ContextualTagRequest struct {
+	AdvertiserID string `json:"advertiser_id"`
+	Language     string `json:"language,omitempty"`
+	CountryCode  string `json:"country_code,omitempty"`
+}
+
+type ContextualTagResponse struct {
+	models.BaseResponse
+	Data []ContextualTagInfo `json:"data"`
+}
+
+type ContextualTagInfo struct {
+	TagID   string `json:"tag_id"`
+	TagName string `json:"tag_name"`
+	Category string `json:"category,omitempty"`
+}
+
+type PhoneRegionCodeResponse struct {
+	models.BaseResponse
+	Data []PhoneRegionCodeInfo `json:"data"`
+}
+
+type PhoneRegionCodeInfo struct {
+	RegionCode  string `json:"region_code"`
+	RegionName  string `json:"region_name"`
+	CountryCode string `json:"country_code"`
+}
+
+// Creative API - Interface types
+type ImageUploadRequest struct {
+	AdvertiserID string `json:"advertiser_id"`
+	ImageData    []byte `json:"image_data"`
+	ImageName    string `json:"image_name"`
+	ImageType    string `json:"image_type"` // JPG, PNG, GIF
+}
+
+type ImageUploadResponse struct {
+	models.BaseResponse
+	Data ImageUploadData `json:"data"`
+}
+
+type ImageUploadData struct {
+	ImageID   string `json:"image_id"`
+	ImageURL  string `json:"image_url"`
+	Width     int    `json:"width"`
+	Height    int    `json:"height"`
+	Size      int64  `json:"size"`
+}
+
+type VideoUploadRequest struct {
+	AdvertiserID string `json:"advertiser_id"`
+	VideoData    []byte `json:"video_data"`
+	VideoName    string `json:"video_name"`
+	VideoType    string `json:"video_type"` // MP4, MOV, AVI
+}
+
+type VideoUploadResponse struct {
+	models.BaseResponse
+	Data VideoUploadData `json:"data"`
+}
+
+type VideoUploadData struct {
+	VideoID   string  `json:"video_id"`
+	VideoURL  string  `json:"video_url"`
+	Duration  float64 `json:"duration"`
+	Width     int     `json:"width"`
+	Height    int     `json:"height"`
+	Size      int64   `json:"size"`
+}
+
+type CreativeGetRequest struct {
+	AdvertiserID string `json:"advertiser_id"`
+	CreativeType string `json:"creative_type,omitempty"` // IMAGE, VIDEO, AUDIO
+	Page         int    `json:"page,omitempty"`
+	Size         int    `json:"size,omitempty"`
+}
+
+type CreativeGetResponse struct {
+	models.BaseResponse
+	Data CreativeGetData `json:"data"`
+}
+
+type CreativeGetData struct {
+	Creatives []CreativeInfo `json:"creatives"`
+	PageInfo  struct {
+		Page       int `json:"page"`
+		Size       int `json:"size"`
+		TotalCount int `json:"total_count"`
+		TotalPage  int `json:"total_page"`
+	} `json:"page_info"`
+}
+
+type CreativeInfo struct {
+	CreativeID   string `json:"creative_id"`
+	CreativeName string `json:"creative_name"`
+	CreativeType string `json:"creative_type"`
+	URL          string `json:"url"`
+	Width        int    `json:"width,omitempty"`
+	Height       int    `json:"height,omitempty"`
+	Duration     float64 `json:"duration,omitempty"`
+	Size         int64  `json:"size"`
+	CreateTime   string `json:"create_time"`
+	UpdateTime   string `json:"update_time"`
+}
+
+type CreativeUpdateRequest struct {
+	AdvertiserID   string `json:"advertiser_id"`
+	CreativeID     string `json:"creative_id"`
+	CreativeName   string `json:"creative_name,omitempty"`
+	CreativeStatus string `json:"creative_status,omitempty"` // ACTIVE, PAUSED, DELETED
+}
+
+type CreativeUpdateResponse struct {
+	models.BaseResponse
+	Data CreativeUpdateData `json:"data"`
+}
+
+type CreativeUpdateData struct {
+	CreativeID string `json:"creative_id"`
+	Status     string `json:"status"`
+}

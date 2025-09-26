@@ -454,3 +454,318 @@ func (t *toolService) GetDeviceModels(ctx context.Context, req *DeviceModelsRequ
 
 	return &response, nil
 }
+
+// GetTargetingInfo retrieves targeting information by ID
+func (t *toolService) GetTargetingInfo(ctx context.Context, req *TargetingInfoRequest) (*TargetingInfoResponse, error) {
+	endpoint := "/open_api/v1.3/tool/targeting/info/"
+
+	body, err := json.Marshal(req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request: %w", err)
+	}
+
+	resp, err := t.client.DoRequest(ctx, "POST", endpoint, strings.NewReader(string(body)), nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get targeting info: %w", err)
+	}
+
+	var response TargetingInfoResponse
+	if err := t.client.ParseResponse(resp, &response); err != nil {
+		return nil, err
+	}
+
+	return &response, nil
+}
+
+// GetBidRecommendation retrieves bid recommendations
+func (t *toolService) GetBidRecommendation(ctx context.Context, req *BidRecommendRequest) (*BidRecommendResponse, error) {
+	endpoint := "/open_api/v1.3/tool/bid/recommend/"
+
+	body, err := json.Marshal(req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request: %w", err)
+	}
+
+	resp, err := t.client.DoRequest(ctx, "POST", endpoint, strings.NewReader(string(body)), nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get bid recommendation: %w", err)
+	}
+
+	var response BidRecommendResponse
+	if err := t.client.ParseResponse(resp, &response); err != nil {
+		return nil, err
+	}
+
+	return &response, nil
+}
+
+// GetTargetingList retrieves targeting list
+func (t *toolService) GetTargetingList(ctx context.Context, req *TargetingListRequest) (*TargetingListResponse, error) {
+	endpoint := "/open_api/v1.3/tool/targeting/list/"
+
+	params := map[string]interface{}{
+		"advertiser_id": req.AdvertiserID,
+		"type":          req.Type,
+	}
+
+	if req.Language != "" {
+		params["language"] = req.Language
+	}
+	if req.Keyword != "" {
+		params["keyword"] = req.Keyword
+	}
+	if req.Page > 0 {
+		params["page"] = req.Page
+	}
+	if req.Size > 0 {
+		params["size"] = req.Size
+	}
+
+	url := t.client.BuildURL(endpoint, params)
+
+	resp, err := t.client.DoRequest(ctx, "GET", url, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get targeting list: %w", err)
+	}
+
+	var response TargetingListResponse
+	if err := t.client.ParseResponse(resp, &response); err != nil {
+		return nil, err
+	}
+
+	return &response, nil
+}
+
+// SearchTargeting searches targeting options
+func (t *toolService) SearchTargeting(ctx context.Context, req *TargetingSearchRequest) (*TargetingSearchResponse, error) {
+	endpoint := "/open_api/v1.3/tool/targeting/search/"
+
+	params := map[string]interface{}{
+		"advertiser_id": req.AdvertiserID,
+		"type":          req.Type,
+		"keyword":       req.Keyword,
+	}
+
+	if req.Language != "" {
+		params["language"] = req.Language
+	}
+	if req.CountryCode != "" {
+		params["country_code"] = req.CountryCode
+	}
+
+	url := t.client.BuildURL(endpoint, params)
+
+	resp, err := t.client.DoRequest(ctx, "GET", url, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to search targeting: %w", err)
+	}
+
+	var response TargetingSearchResponse
+	if err := t.client.ParseResponse(resp, &response); err != nil {
+		return nil, err
+	}
+
+	return &response, nil
+}
+
+// GetOSVersions retrieves OS versions for targeting
+func (t *toolService) GetOSVersions(ctx context.Context, req *OSVersionRequest) (*OSVersionResponse, error) {
+	endpoint := "/open_api/v1.3/tool/os_version/"
+
+	params := map[string]interface{}{
+		"advertiser_id": req.AdvertiserID,
+		"os_type":       req.OSType,
+	}
+
+	url := t.client.BuildURL(endpoint, params)
+
+	resp, err := t.client.DoRequest(ctx, "GET", url, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get OS versions: %w", err)
+	}
+
+	var response OSVersionResponse
+	if err := t.client.ParseResponse(resp, &response); err != nil {
+		return nil, err
+	}
+
+	return &response, nil
+}
+
+// GetTimezones retrieves supported timezones
+func (t *toolService) GetTimezones(ctx context.Context, advertiserID string) (*TimezoneResponse, error) {
+	endpoint := "/open_api/v1.3/tool/timezone/"
+
+	params := map[string]interface{}{
+		"advertiser_id": advertiserID,
+	}
+
+	url := t.client.BuildURL(endpoint, params)
+
+	resp, err := t.client.DoRequest(ctx, "GET", url, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get timezones: %w", err)
+	}
+
+	var response TimezoneResponse
+	if err := t.client.ParseResponse(resp, &response); err != nil {
+		return nil, err
+	}
+
+	return &response, nil
+}
+
+// ValidateURL validates a URL
+func (t *toolService) ValidateURL(ctx context.Context, req *URLValidateRequest) (*URLValidateResponse, error) {
+	endpoint := "/open_api/v1.3/tool/url/validate/"
+
+	body, err := json.Marshal(req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request: %w", err)
+	}
+
+	resp, err := t.client.DoRequest(ctx, "POST", endpoint, strings.NewReader(string(body)), nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to validate URL: %w", err)
+	}
+
+	var response URLValidateResponse
+	if err := t.client.ParseResponse(resp, &response); err != nil {
+		return nil, err
+	}
+
+	return &response, nil
+}
+
+// GetHashtagRecommendations retrieves hashtag recommendations
+func (t *toolService) GetHashtagRecommendations(ctx context.Context, req *HashtagRecommendRequest) (*HashtagRecommendResponse, error) {
+	endpoint := "/open_api/v1.3/tool/hashtag/recommend/"
+
+	body, err := json.Marshal(req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request: %w", err)
+	}
+
+	resp, err := t.client.DoRequest(ctx, "POST", endpoint, strings.NewReader(string(body)), nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get hashtag recommendations: %w", err)
+	}
+
+	var response HashtagRecommendResponse
+	if err := t.client.ParseResponse(resp, &response); err != nil {
+		return nil, err
+	}
+
+	return &response, nil
+}
+
+// GetInterestKeywords retrieves interest keywords
+func (t *toolService) GetInterestKeywords(ctx context.Context, req *InterestKeywordRequest) (*InterestKeywordResponse, error) {
+	endpoint := "/open_api/v1.3/tool/interest_keyword/get/"
+
+	params := map[string]interface{}{
+		"advertiser_id": req.AdvertiserID,
+		"keyword":       req.Keyword,
+	}
+
+	if req.Language != "" {
+		params["language"] = req.Language
+	}
+	if req.CountryCode != "" {
+		params["country_code"] = req.CountryCode
+	}
+
+	url := t.client.BuildURL(endpoint, params)
+
+	resp, err := t.client.DoRequest(ctx, "GET", url, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get interest keywords: %w", err)
+	}
+
+	var response InterestKeywordResponse
+	if err := t.client.ParseResponse(resp, &response); err != nil {
+		return nil, err
+	}
+
+	return &response, nil
+}
+
+// GetActionCategories retrieves action categories
+func (t *toolService) GetActionCategories(ctx context.Context, req *ActionCategoryRequest) (*ActionCategoryResponse, error) {
+	endpoint := "/open_api/v1.3/tool/action_category/"
+
+	params := map[string]interface{}{
+		"advertiser_id": req.AdvertiserID,
+	}
+
+	if req.SpecialIndustries != nil && len(req.SpecialIndustries) > 0 {
+		params["special_industries"] = req.SpecialIndustries
+	}
+
+	url := t.client.BuildURL(endpoint, params)
+
+	resp, err := t.client.DoRequest(ctx, "GET", url, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get action categories: %w", err)
+	}
+
+	var response ActionCategoryResponse
+	if err := t.client.ParseResponse(resp, &response); err != nil {
+		return nil, err
+	}
+
+	return &response, nil
+}
+
+// GetContextualTags retrieves contextual tags
+func (t *toolService) GetContextualTags(ctx context.Context, req *ContextualTagRequest) (*ContextualTagResponse, error) {
+	endpoint := "/open_api/v1.3/tool/contextual_tag/get/"
+
+	params := map[string]interface{}{
+		"advertiser_id": req.AdvertiserID,
+	}
+
+	if req.Language != "" {
+		params["language"] = req.Language
+	}
+	if req.CountryCode != "" {
+		params["country_code"] = req.CountryCode
+	}
+
+	url := t.client.BuildURL(endpoint, params)
+
+	resp, err := t.client.DoRequest(ctx, "GET", url, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get contextual tags: %w", err)
+	}
+
+	var response ContextualTagResponse
+	if err := t.client.ParseResponse(resp, &response); err != nil {
+		return nil, err
+	}
+
+	return &response, nil
+}
+
+// GetPhoneRegionCodes retrieves phone region codes
+func (t *toolService) GetPhoneRegionCodes(ctx context.Context, advertiserID string) (*PhoneRegionCodeResponse, error) {
+	endpoint := "/open_api/v1.3/tool/phone_region_code/"
+
+	params := map[string]interface{}{
+		"advertiser_id": advertiserID,
+	}
+
+	url := t.client.BuildURL(endpoint, params)
+
+	resp, err := t.client.DoRequest(ctx, "GET", url, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get phone region codes: %w", err)
+	}
+
+	var response PhoneRegionCodeResponse
+	if err := t.client.ParseResponse(resp, &response); err != nil {
+		return nil, err
+	}
+
+	return &response, nil
+}

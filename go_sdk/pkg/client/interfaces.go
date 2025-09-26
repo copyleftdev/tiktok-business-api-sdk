@@ -184,3 +184,66 @@ type AuthService interface {
 	// RevokeToken revokes an access token
 	RevokeToken(ctx context.Context, token string) error
 }
+
+// OptimizerService defines the interface for optimizer-related operations
+type OptimizerService interface {
+	// CreateRule creates a new automated rule
+	CreateRule(ctx context.Context, req *OptimizerRuleCreateRequest) (*OptimizerRuleResponse, error)
+
+	// GetRule retrieves optimizer rule information
+	GetRule(ctx context.Context, req *OptimizerRuleGetRequest) (*OptimizerRuleResponse, error)
+
+	// ListRules retrieves a list of optimizer rules
+	ListRules(ctx context.Context, req *OptimizerRuleListRequest) (*OptimizerRuleListResponse, error)
+
+	// UpdateRule updates an existing optimizer rule
+	UpdateRule(ctx context.Context, req *OptimizerRuleUpdateRequest) (*OptimizerRuleResponse, error)
+
+	// BatchBindRule binds rules to campaigns/ad groups in batch
+	BatchBindRule(ctx context.Context, req *OptimizerRuleBatchBindRequest) (*OptimizerRuleBatchBindResponse, error)
+
+	// GetRuleResult retrieves optimizer rule execution results
+	GetRuleResult(ctx context.Context, req *OptimizerRuleResultGetRequest) (*OptimizerRuleResultResponse, error)
+
+	// ListRuleResults retrieves a list of optimizer rule execution results
+	ListRuleResults(ctx context.Context, req *OptimizerRuleResultListRequest) (*OptimizerRuleResultListResponse, error)
+}
+
+// CommentService defines the interface for comment-related operations
+type CommentService interface {
+	// ListComments retrieves a list of comments
+	ListComments(ctx context.Context, req *CommentListRequest) (*CommentListResponse, error)
+
+	// PostComment posts a new comment
+	PostComment(ctx context.Context, req *CommentPostRequest) (*CommentPostResponse, error)
+
+	// DeleteComment deletes a comment
+	DeleteComment(ctx context.Context, req *CommentDeleteRequest) (*CommentDeleteResponse, error)
+
+	// UpdateCommentStatus updates comment status
+	UpdateCommentStatus(ctx context.Context, req *CommentStatusUpdateRequest) (*CommentStatusUpdateResponse, error)
+
+	// GetCommentReference retrieves comment reference information
+	GetCommentReference(ctx context.Context, req *CommentReferenceRequest) (*CommentReferenceResponse, error)
+
+	// CreateCommentTask creates a comment management task
+	CreateCommentTask(ctx context.Context, req *CommentTaskCreateRequest) (*CommentTaskResponse, error)
+
+	// CheckCommentTask checks comment task status
+	CheckCommentTask(ctx context.Context, req *CommentTaskCheckRequest) (*CommentTaskCheckResponse, error)
+}
+
+// ReportService defines the interface for report-related operations
+type ReportService interface {
+	// GetIntegratedReport retrieves integrated reporting data
+	GetIntegratedReport(ctx context.Context, req *ReportIntegratedGetRequest) (*ReportIntegratedResponse, error)
+
+	// CreateReportTask creates a new report generation task
+	CreateReportTask(ctx context.Context, req *ReportTaskCreateRequest) (*ReportTaskResponse, error)
+
+	// CheckReportTask checks the status of a report generation task
+	CheckReportTask(ctx context.Context, req *ReportTaskCheckRequest) (*ReportTaskCheckResponse, error)
+
+	// CancelReportTask cancels a report generation task
+	CancelReportTask(ctx context.Context, req *ReportTaskCancelRequest) (*ReportTaskCancelResponse, error)
+}

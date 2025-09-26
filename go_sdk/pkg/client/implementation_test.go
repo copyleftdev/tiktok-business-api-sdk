@@ -105,6 +105,27 @@ func TestAllServicesHaveProperImplementations(t *testing.T) {
 		if client.Auth() == nil {
 			t.Error("Auth service should not be nil")
 		}
+
+		// New implemented services
+		if client.BusinessCenter() == nil {
+			t.Error("BusinessCenter service should not be nil")
+		}
+
+		if client.Catalog() == nil {
+			t.Error("Catalog service should not be nil")
+		}
+
+		if client.DMP() == nil {
+			t.Error("DMP service should not be nil")
+		}
+
+		if client.Pixel() == nil {
+			t.Error("Pixel service should not be nil")
+		}
+
+		if client.Creative() == nil {
+			t.Error("Creative service should not be nil")
+		}
 	})
 
 	// Test that not-yet-implemented services return proper errors
@@ -140,11 +161,6 @@ func TestAllServicesHaveProperImplementations(t *testing.T) {
 			t.Errorf("Audience service should return ErrServiceNotImplemented, got: %v", err)
 		}
 
-		// Test Creative service returns proper error
-		_, err = client.Creative().UploadImage(ctx, &ImageUploadRequest{})
-		if err != ErrServiceNotImplemented {
-			t.Errorf("Creative service should return ErrServiceNotImplemented, got: %v", err)
-		}
 
 		// Test Reporting service returns proper error
 		_, err = client.Reporting().GetBasicReports(ctx, &ReportingRequest{})
