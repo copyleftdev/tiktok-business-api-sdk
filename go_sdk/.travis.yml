@@ -1,0 +1,61 @@
+# TikTok Business API Go SDK - Travis CI Configuration
+# Aligned with existing SDK CI/CD pipeline
+
+language: go
+
+# Go versions to test against (following Go's support policy)
+go:
+  - "1.19.x"
+  - "1.20.x" 
+  - "1.21.x"
+  - tip
+
+# Operating systems to test on
+os:
+  - linux
+  - osx
+  - windows
+
+# Environment variables
+env:
+  - GO111MODULE=on
+
+# Allow tip version to fail (development version)
+matrix:
+  allow_failures:
+    - go: tip
+  fast_finish: true
+
+# Cache dependencies for faster builds
+cache:
+  directories:
+    - $GOPATH/pkg/mod
+
+# Pre-install steps
+before_install:
+  - go version
+  - go env
+
+# Install dependencies
+install:
+  - make dev-setup
+
+# Build and test commands
+script:
+  - make ci
+
+# Post-success actions (code coverage, etc.)
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
+# Notifications (align with TikTok's preferences)
+notifications:
+  email: false
+
+# Deployment configuration (if needed)
+deploy:
+  provider: script
+  script: echo "Deployment would go here"
+  on:
+    tags: true
+    condition: $TRAVIS_GO_VERSION =~ ^1\.21
